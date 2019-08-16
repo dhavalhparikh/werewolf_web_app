@@ -1,0 +1,31 @@
+<!-- session.html-->
+
+{% extends "base.html" %}
+{% block title %}Home{% endblock %}
+{% block body %}
+<div class="jumbotron">
+  <!-- <h1>Werewolf Web App</h1>
+  <p class="lead">Welcome to the goTenna internal Werewolf app.</p>
+  <p class="lead">Click on the Moderator or Player buttons to get started!</p>
+  <a class="btn btn-primary btn-lg" href="/moderator" role="button">Moderator</a>
+  <a class="btn btn-primary btn-lg" href="/player" role="button">Player</a> -->
+  <h2>Session created!</h2>
+
+  <ul>
+    {% for key, value in session_dict.iteritems() %}
+        <dt>{{key}}: {{value}}</dt>
+        <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                <label class="btn btn-secondary active">
+                  <input type="radio" name="options" id="option1" autocomplete="off" checked> Active
+                </label>
+                <label class="btn btn-secondary">
+                  <input type="radio" name="options" id="option2" autocomplete="off"> Radio
+                </label>
+                <label class="btn btn-secondary">
+                  <input type="radio" name="options" id="option3" autocomplete="off"> Radio
+                </label>
+              </div>
+    {% endfor %}
+  </ul>
+</div>
+{% endblock %}
