@@ -9,23 +9,48 @@
   <p class="lead">Click on the Moderator or Player buttons to get started!</p>
   <a class="btn btn-primary btn-lg" href="/moderator" role="button">Moderator</a>
   <a class="btn btn-primary btn-lg" href="/player" role="button">Player</a> -->
-  <h2>Session created!</h2>
+  <h2 align="center">Session created!</h2>
+  <h3>Session info:</h3>
 
-  <ul>
-    {% for key, value in session_dict.iteritems() %}
-        <dt>{{key}}: {{value}}</dt>
-        <div class="btn-group btn-group-toggle" data-toggle="buttons">
-                <label class="btn btn-secondary active">
-                  <input type="radio" name="options" id="option1" autocomplete="off" checked> Active
-                </label>
-                <label class="btn btn-secondary">
-                  <input type="radio" name="options" id="option2" autocomplete="off"> Radio
-                </label>
-                <label class="btn btn-secondary">
-                  <input type="radio" name="options" id="option3" autocomplete="off"> Radio
-                </label>
-              </div>
-    {% endfor %}
-  </ul>
+  <table class="table table-hover">
+      <thead class="thead-light">
+        <tr>
+          <th scope="col">Key</th>
+          <th scope="col">Value</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for key, value in session_dict.iteritems() %}
+          {% if 'player_info' not in key %}
+            <tr>
+              <td>{{key}}</td>
+              <td>{{value}}</td>
+            </tr>
+          {% endif %}
+        {% endfor %}
+      </tbody>
+    </table>
+
+    <h3>Player info:</h3>
+    <table class="table table-hover">
+        <thead class="thead-light">
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Role</th>
+            <th scope="col">Is alive?</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for player_info in session_dict['player_info'] %}
+            <tr>
+                <th scope="row">{{ loop.index }}</th>
+                <td>{{ player_info["role"] }}</td>
+                <td>{{ player_info["is_alive"] }}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+  
+
 </div>
 {% endblock %}
