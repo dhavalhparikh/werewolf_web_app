@@ -36,6 +36,7 @@
         <thead class="thead-light">
           <tr>
             <th scope="col">#</th>
+            <th scope="col">Name</th>
             <th scope="col">Role</th>
             <th scope="col">Is alive?</th>
           </tr>
@@ -44,6 +45,7 @@
           {% for player_info in session_dict['player_info'] %}
             <tr>
                 <th scope="row">{{ loop.index }}</th>
+                <td>{{ player_info["name"] }}</td>
                 <td>{{ player_info["role"] }}</td>
                 <td>{{ player_info["is_alive"] }}</td>
             </tr>
@@ -51,6 +53,6 @@
         </tbody>
       </table>
   
-
+  <a class="btn btn-primary btn-lg" href="/reload" role="button">Reload</a>
 </div>
 {% endblock %}

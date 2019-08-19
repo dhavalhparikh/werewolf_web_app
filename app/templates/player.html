@@ -1,0 +1,24 @@
+<!-- player.html-->
+
+{% extends "base.html" %}
+{% block title %}Home{% endblock %}
+{% block body %}
+<div class="jumbotron">
+    <form method="POST">
+        <!-- <input name="text">
+        <input type="submit"> -->
+        <h2 align="center">Welcome, player!</h2>
+        <div class="grid">
+            <div class="row align-center">
+                <label for="session_id">Name:</label>
+                <input type="text" id="player_name" name="player_name">
+            </div>
+            <div class="row">
+                <label for="session_id">Session ID:</label>
+                <input type="text" id="session_id" name="session_id">
+            </div>
+        </div>
+        <input type="submit" class="btn btn-primary btn-lg" value="Join!"></input>
+    </form>
+</div>
+{% endblock %}
