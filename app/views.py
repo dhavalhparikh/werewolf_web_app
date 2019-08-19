@@ -158,7 +158,7 @@ def player_join():
     random_idx = random.randint(0, g_session_dict['num_players'])
     if random_idx in g_random_set:
         while True:
-            random_idx = random.randint(0, g_session_dict['num_players'])
+            random_idx = random.randint(0, g_session_dict['num_players']-1)
             if random_idx not in g_random_set:
                 break
     g_random_set.add(random_idx)
