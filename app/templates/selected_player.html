@@ -5,10 +5,12 @@
 {% block body %}
 <div class="jumbotron">
     <form method="POST">
-        <!-- <input name="text">
-        <input type="submit"> -->
-        <h2 align="center">Your role is:</h2>
-        <h1 align="center">{{role}}</h2>
+        {% if error is sameas true %}
+        <h1 align="center">{{err_msg}}</h2>
+        {% else %}
+            <h2 align="center">Your role is:</h2>
+            <h1 align="center">{{role}}</h2>
+        {% endif %}
     </form>
 </div>
 {% endblock %}

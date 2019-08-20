@@ -135,13 +135,6 @@ def moderator_session_data():
     
 @app.route('/reload')
 def reload_session_data():
-    # here the reload is only mocking dead werewolves on reload
-    if g_session_dict:
-        for dict_item in g_session_dict["player_info"]:
-            if "werewolf" in dict_item["role"]:
-                dict_item['name'] = "Makinda"
-                dict_item['is_alive'] = False
-    
     return render_template("session.html", session_dict = g_session_dict)
 
 @app.route('/player')
@@ -153,9 +146,11 @@ def player_join():
     player_name = request.form['player_name']
     entered_session_id = request.form['session_id']
     if not g_session_dict:
-        return "Session not created yet!"
+        return render_template('selected_player.html', error = True, err_msg = "Session not created yet. Please contact the moderator", role = None)
+    if (len(g_random_set) >= g_session_dict['num_players']):
+        return render_template('selected_player.html', error = True, err_msg = "Session Full! Please contact the moderator", role = None)
 
-    random_idx = random.randint(0, g_session_dict['num_players'])
+    random_idx = random.randint(0, g_session_dict['num_players']-1)
     if random_idx in g_random_set:
         while True:
             random_idx = random.randint(0, g_session_dict['num_players']-1)
@@ -167,5 +162,5 @@ def player_join():
     g_session_dict["player_info"][random_idx]['name'] = player_name
 
     if g_session_dict['session_id'] in entered_session_id:
-        return render_template("selected_player.html", role = g_session_dict["player_info"][random_idx]['role'])
-    return "Session ID invalid"
+        return render_template("selected_player.html", error = False, err_msg = None, role = g_session_dict["player_info"][random_idx]['role'])
+    return render_template('selected_player.html', error = True, err_msg = "Invalid session ID", role = None)
