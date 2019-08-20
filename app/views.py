@@ -9,6 +9,8 @@ import random
 g_session_dict = {}
 g_random_set = set()
 
+g_special_char_list = ['bodyguard', 'hunter', 'spellcaster', 'doppelganger']
+
 @app.route('/')
 def index():
     return render_template("index.html")
@@ -25,6 +27,7 @@ def moderator():
 def moderator_session_data():
     global g_session_dict
     global g_random_set
+    global g_special_char_list
 
     g_session_dict.clear()
     g_random_set.clear()
@@ -33,7 +36,6 @@ def moderator_session_data():
     
     session_dict = {}
     player_dict_list = []
-    print(session_id)
 
     total_num_players = int(request.form['num_players'])
 
@@ -48,53 +50,28 @@ def moderator_session_data():
     elif total_num_players >= 16:
         num_werewolves = 4
     
-    should_include_bodyguard = request.form.getlist('bodyguard')
-    if (should_include_bodyguard):
-        player_dict = {
-            "role": "bodyguard",
-            "is_alive": True,
-            "name": "TBD"
-        }
-        num_special_characters += 1
-        player_dict_list.append(player_dict)
-    
-    should_include_hunter = request.form.getlist('hunter')
-    if (should_include_hunter):
-        player_dict = {
-            "role": "hunter",
-            "is_alive": True,
-            "name": "TBD"
-        }
-        num_special_characters += 1
-        player_dict_list.append(player_dict)
-    
-    should_include_spellcaster = request.form.getlist('spellcaster')
-    if (should_include_spellcaster):
-        player_dict = {
-            "role": "spellcaster",
-            "is_alive": True,
-            "name": "TBD"
-        }
-        num_special_characters += 1
-        player_dict_list.append(player_dict)
-    
-    should_include_doppelganger = request.form.getlist('doppelganger')
-    if (should_include_doppelganger):
-        player_dict = {
-            "role": "doppelganger",
-            "is_alive": True,
-            "name": "TBD"
-        }
-        num_special_characters += 1
-        player_dict_list.append(player_dict)
-    
+    player_id = 0
+    # add the special characters
+    for special_char in g_special_char_list:
+        should_include = request.form.getlist(special_char)
+        player_dict = {}
+        if should_include:
+            player_dict["player_id"] = player_id
+            player_dict["role"] = special_char
+            player_dict["is_alive"] = True
+            player_dict["name"] = "TBD"
+            player_id += 1
+            num_special_characters += 1
+            player_dict_list.append(player_dict)
+
     # add the werewolves
     for i in range(0, num_werewolves):
-        player_dict = {
-            "role": "werewolf",
-            "is_alive": True,
-            "name": "TBD"
-        }
+        player_dict = {}
+        player_dict["player_id"] = player_id
+        player_dict["role"] = "werewolf"
+        player_dict["is_alive"] = True
+        player_dict["name"] = "TBD"
+        player_id += 1
         player_dict_list.append(player_dict)
 
     #  -1 is for the seer
@@ -102,24 +79,27 @@ def moderator_session_data():
     # TODO: check is number of villagers is not 0 or negative
     # add the villagers
     for i in range(0, num_villagers):
-        player_dict = {
-            "role": "villager",
-            "is_alive": True,
-            "name": "TBD"
-        }
+        player_dict = {}
+        player_dict["player_id"] = player_id
+        player_dict["role"] = "villager"
+        player_dict["is_alive"] = True
+        player_dict["name"] = "TBD"
+        player_id += 1
         player_dict_list.append(player_dict)
     
     # but num_villagers also includes a seer
     num_villagers += 1
 
     # add the seer
-    player_dict = {
-            "role": "seer",
-            "is_alive": True,
-            "name": "TBD"
-        }
+    player_dict = {}
+    player_dict["player_id"] = player_id
+    player_dict["role"] = "seer"
+    player_dict["is_alive"] = True
+    player_dict["name"] = "TBD"
+    player_id += 1
     player_dict_list.append(player_dict)
    
+    # fill in the session details
     session_dict['session_id'] = session_id
     session_dict['num_players'] = total_num_players
     session_dict['player_info'] = player_dict_list
@@ -145,22 +125,25 @@ def player():
 def player_join():
     player_name = request.form['player_name']
     entered_session_id = request.form['session_id']
+
+    # handle errors
     if not g_session_dict:
         return render_template('selected_player.html', error = True, err_msg = "Session not created yet. Please contact the moderator", role = None)
+    if g_session_dict['session_id'] not in entered_session_id:
+        return render_template('selected_player.html', error = True, err_msg = "Invalid session ID", role = None)
     if (len(g_random_set) >= g_session_dict['num_players']):
         return render_template('selected_player.html', error = True, err_msg = "Session Full! Please contact the moderator", role = None)
 
+    # get random index from the range
     random_idx = random.randint(0, g_session_dict['num_players']-1)
     if random_idx in g_random_set:
+        # make sure we don't get a duplicate
         while True:
             random_idx = random.randint(0, g_session_dict['num_players']-1)
             if random_idx not in g_random_set:
                 break
     g_random_set.add(random_idx)
-        
-    print(random_idx)
-    g_session_dict["player_info"][random_idx]['name'] = player_name
 
-    if g_session_dict['session_id'] in entered_session_id:
-        return render_template("selected_player.html", error = False, err_msg = None, role = g_session_dict["player_info"][random_idx]['role'])
-    return render_template('selected_player.html', error = True, err_msg = "Invalid session ID", role = None)
+    # update the player name in the global session dict
+    g_session_dict["player_info"][random_idx]['name'] = player_name
+    return render_template("selected_player.html", error = False, err_msg = None, role = g_session_dict["player_info"][random_idx]['role'])
