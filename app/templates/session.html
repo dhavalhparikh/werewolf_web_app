@@ -20,7 +20,7 @@
         </tr>
       </thead>
       <tbody>
-        {% for key, value in session_dict.iteritems() %}
+        {% for key, value in session_dict.items() %}
           {% if 'player_info' not in key %}
             <tr>
               <td>{{key}}</td>

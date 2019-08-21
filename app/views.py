@@ -1,6 +1,6 @@
 from flask import render_template, request
 from app import app
-import ds
+from app import ds
 import json
 import random
 
@@ -144,6 +144,17 @@ def player_join():
                 break
     g_random_set.add(random_idx)
 
+    alias = ""
+    profession = ""
+
+    should_include_alias = request.form.getlist('alias')
+    if (should_include_alias):
+        alias = ds.get_alias()
+    
+    should_include_profession = request.form.getlist('profession')
+    if (should_include_profession):
+        profession = ds.get_profession()
+
     # update the player name in the global session dict
     g_session_dict["player_info"][random_idx]['name'] = player_name
-    return render_template("selected_player.html", error = False, err_msg = None, role = g_session_dict["player_info"][random_idx]['role'])
+    return render_template("selected_player.html", error = False, err_msg = None, role = g_session_dict["player_info"][random_idx]['role'], alias = alias, profession = profession)
