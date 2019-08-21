@@ -7,9 +7,8 @@ import random
 # global session context
 # TODO: find another way to do it
 g_session_dict = {}
-g_random_set = set()
-
 g_special_char_list = ['bodyguard', 'hunter', 'spellcaster', 'doppelganger']
+g_random_list = []
 
 @app.route('/')
 def index():
@@ -26,11 +25,11 @@ def moderator():
 @app.route('/moderator', methods=['POST'])
 def moderator_session_data():
     global g_session_dict
-    global g_random_set
     global g_special_char_list
+    global g_random_list
 
     g_session_dict.clear()
-    g_random_set.clear()
+    g_random_list[:] = []
 
     session_id = ds.get_session_id()
     
@@ -38,6 +37,10 @@ def moderator_session_data():
     player_dict_list = []
 
     total_num_players = int(request.form['num_players'])
+
+    # create the list for players
+    g_random_list = list(xrange(total_num_players))
+    print(g_random_list)
 
     num_special_characters = 0
     num_werewolves = 0
@@ -127,22 +130,16 @@ def player_join():
     entered_session_id = request.form['session_id']
 
     # handle errors
-    if not g_session_dict:
+    if not g_session_dict and not g_random_list:
         return render_template('selected_player.html', error = True, err_msg = "Session not created yet. Please contact the moderator", role = None)
     if g_session_dict['session_id'] not in entered_session_id:
         return render_template('selected_player.html', error = True, err_msg = "Invalid session ID", role = None)
-    if (len(g_random_set) >= g_session_dict['num_players']):
+    if g_session_dict and not g_random_list:
         return render_template('selected_player.html', error = True, err_msg = "Session Full! Please contact the moderator", role = None)
 
     # get random index from the range
-    random_idx = random.randint(0, g_session_dict['num_players']-1)
-    if random_idx in g_random_set:
-        # make sure we don't get a duplicate
-        while True:
-            random_idx = random.randint(0, g_session_dict['num_players']-1)
-            if random_idx not in g_random_set:
-                break
-    g_random_set.add(random_idx)
+    random_idx = random.choice(g_random_list)
+    g_random_list.remove(random_idx)
 
     # update the player name in the global session dict
     g_session_dict["player_info"][random_idx]['name'] = player_name
