@@ -9,20 +9,23 @@ import random
 g_session_dict = {}
 g_special_char_list = ['bodyguard', 'hunter', 'spellcaster', 'doppelganger']
 g_random_list = []
+g_script_root = ""
 
 @app.route('/')
 def index():
-    return render_template("index.html")
+    global g_script_root
+    g_script_root = request.script_root
+    return render_template("index.html", script_root = g_script_root)
 
 @app.route('/about')
 def about():
     return render_template("about.html")
 
-@app.route('/moderator')
+@app.route(g_script_root+'/moderator')
 def moderator():
     return render_template("moderator.html")
 
-@app.route('/moderator', methods=['POST'])
+@app.route(g_script_root+'/moderator', methods=['POST'])
 def moderator_session_data():
     global g_session_dict
     global g_special_char_list
@@ -114,17 +117,17 @@ def moderator_session_data():
     g_session_dict = session_dict
 
     # return json.dumps(session_dict)
-    return render_template("session.html", session_dict = g_session_dict)
+    return render_template("session.html", session_dict = g_session_dict, script_root = g_script_root)
     
-@app.route('/reload')
+@app.route(g_script_root+'/reload')
 def reload_session_data():
-    return render_template("session.html", session_dict = g_session_dict)
+    return render_template("session.html", session_dict = g_session_dict, script_root = g_script_root)
 
-@app.route('/player')
+@app.route(g_script_root+'/player')
 def player():
     return render_template("player.html")
 
-@app.route('/player', methods=['POST'])
+@app.route(g_script_root+'/player', methods=['POST'])
 def player_join():
     player_name = request.form['player_name']
     entered_session_id = request.form['session_id']

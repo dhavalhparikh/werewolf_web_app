@@ -4,10 +4,14 @@
 {% block title %}Home{% endblock %}
 {% block body %}
 <div class="jumbotron">
-  <h1>Werewolf Web App</h1>
-  <p class="lead">Welcome to the Werewolf web app.</p>
-  <p class="lead">Click on the Moderator/Player button to get started!</p>
-  <a class="btn btn-primary btn-lg" href="/moderator" role="button">Moderator</a>
-  <a class="btn btn-primary btn-lg" href="/player" role="button">Player</a>
+  <form method="POST">
+    {% set mod = script_root ~ "/moderator" %}
+    {% set player = script_root ~ "/player" %}
+    <h1>Werewolf Web App</h1>
+    <p class="lead">Welcome to the Werewolf web app.</p>
+    <p class="lead">Click on the Moderator/Player button to get started!</p>
+    <a class="btn btn-primary btn-lg" href={{mod}} role="button">Moderator</a>
+    <a class="btn btn-primary btn-lg" href="{{player}}" role="button">Player</a>
+  </form>
 </div>
 {% endblock %}

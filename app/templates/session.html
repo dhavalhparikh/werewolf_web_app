@@ -4,11 +4,7 @@
 {% block title %}Home{% endblock %}
 {% block body %}
 <div class="jumbotron">
-  <!-- <h1>Werewolf Web App</h1>
-  <p class="lead">Welcome to the goTenna internal Werewolf app.</p>
-  <p class="lead">Click on the Moderator or Player buttons to get started!</p>
-  <a class="btn btn-primary btn-lg" href="/moderator" role="button">Moderator</a>
-  <a class="btn btn-primary btn-lg" href="/player" role="button">Player</a> -->
+  {% set reload = script_root ~ "/reload" %}
   <h2 align="center">Session created!</h2>
   <h3>Session info:</h3>
 
@@ -53,6 +49,6 @@
         </tbody>
       </table>
   
-  <a class="btn btn-primary btn-lg" href="/reload" role="button">Reload</a>
+  <a class="btn btn-primary btn-lg" href="{{reload}}" role="button">Reload</a>
 </div>
 {% endblock %}

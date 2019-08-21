@@ -1,2 +1,2 @@
-# Enable Flask's debugging features. Should be Fals in prod
+# Enable Flask's debugging features. Should be False in prod
 DEBUG = True
