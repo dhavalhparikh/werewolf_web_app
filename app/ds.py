@@ -28,7 +28,7 @@ def get_alias():
     "Barbra","Henry","Thomas","Ronald","Margaret","Claudia","Berta","Agnes",
     "Mary","Paula","Paul","Ivan","Alexey","Gretta","Alexandra","Svetlana",
     "Natasha","Laura","Aarav","Vivaan","Aditya","Arjun","Shaurya","Adhira",
-    "Charu","Eka","Hiya","Keya"])
+    "Charu","Eka","Hiya","Keya", "Pedro Pedro","Dwight Schrute"])
 
 def get_profession():
     quality = random.choice(["Apprentice","Wannabe","Mature","Elder","Underqualified",
@@ -39,4 +39,4 @@ def get_profession():
     "City Council","Firefighter","Pirate","Batender","Inn Keep","Drunkard",
     "Hermit","Dentist","Lumberjack","Monk","Herbalist","Doctor","Teacher",
     "Banker","Scientist","Alchemist","Shoe Maker","Baker","Confectioner","Lawyer"])
-    return f"{quality} {position}"
+    return quality + " " + position
