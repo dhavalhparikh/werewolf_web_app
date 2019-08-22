@@ -8,7 +8,13 @@
         {% if error is sameas true %}
         <h2 align="center">{{err_msg}}</h2>
         {% else %}
-            <h1 align="center">{{alias}} - The {{profession}}</h1>
+            {% if alias and profession %}
+                <h1 align="center">{{alias}} - The {{profession}}</h1>
+            {% elif not alias and profession %}
+                <h1 align="center">The {{profession}}</h1>
+            {% elif alias and not profession %}
+                <h1 align="center">{{alias}}</h1>
+            {% endif %}
             <h2 align="center">You are a:</h2>
             <h1 align="center">{{role}}</h1>
         {% endif %}
