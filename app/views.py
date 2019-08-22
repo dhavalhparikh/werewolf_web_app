@@ -17,13 +17,13 @@ def index():
     g_script_root = request.script_root
     return render_template("index.html", script_root = g_script_root)
 
-@app.route('/about')
+@app.route(g_script_root+'/about')
 def about():
-    return render_template("about.html")
+    return render_template("about.html", script_root = g_script_root)
 
 @app.route(g_script_root+'/moderator')
 def moderator():
-    return render_template("moderator.html")
+    return render_template("moderator.html", script_root = g_script_root)
 
 @app.route(g_script_root+'/moderator', methods=['POST'])
 def moderator_session_data():
