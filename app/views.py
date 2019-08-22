@@ -142,11 +142,11 @@ def player_join():
 
     # handle errors
     if not g_session_dict and not g_random_list:
-        return render_template('selected_player.html', error = True, err_msg = "Session not created yet. Please contact the moderator", role = None)
+        return render_template('selected_player.html', script_root = g_script_root, error = True, err_msg = "Session not created yet. Please contact the moderator", role = None)
     if g_session_dict['session_id'] not in entered_session_id:
-        return render_template('selected_player.html', error = True, err_msg = "Invalid session ID", role = None)
+        return render_template('selected_player.html', script_root = g_script_root, error = True, err_msg = "Invalid session ID", role = None)
     if g_session_dict and not g_random_list:
-        return render_template('selected_player.html', error = True, err_msg = "Session Full! Please contact the moderator", role = None)
+        return render_template('selected_player.html', script_root = g_script_root, error = True, err_msg = "Session Full! Please contact the moderator", role = None)
 
     # get random index from the range
     random_idx = random.choice(g_random_list)
