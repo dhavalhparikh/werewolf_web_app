@@ -16,7 +16,7 @@
         </tr>
       </thead>
       <tbody>
-        {% for key, value in session_dict.iteritems() %}
+        {% for key, value in session_dict.items() %}
           {% if 'player_info' not in key %}
             <tr>
               <td>{{key}}</td>
@@ -34,6 +34,8 @@
             <th scope="col">#</th>
             <th scope="col">Name</th>
             <th scope="col">Role</th>
+            <th scope="col">Alias</th>
+            <th scope="col">Profession</th>
             <th scope="col">Is alive?</th>
           </tr>
         </thead>
@@ -43,6 +45,8 @@
                 <th scope="row">{{ loop.index }}</th>
                 <td>{{ player_info["name"] }}</td>
                 <td>{{ player_info["role"] }}</td>
+                <td>{{ player_info["alias"] }}</td>
+                <td>{{ player_info["profession"] }}</td>
                 <td>{{ player_info["is_alive"] }}</td>
             </tr>
           {% endfor %}

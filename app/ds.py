@@ -1,4 +1,6 @@
 import uuid
+import random
+import json
 
 # list of player_dict dictionaries
 player_dict_list = []
@@ -21,3 +23,17 @@ session_dict = {
 # generated uuid
 def get_session_id():
     return str(uuid.uuid4())[-4:]
+
+def get_alias():
+    with open('app/data.json') as f:
+        data = json.load(f)
+        f.close
+    return random.choice(data["names"])
+
+def get_profession():
+    with open('app/data.json') as f:
+        data = json.load(f)
+        f.close
+    quality = random.choice(data["quality"])
+    position = random.choice(data["profession"])
+    return quality + " " + position

@@ -1,6 +1,6 @@
 from flask import render_template, request
 from app import app
-import ds
+from app import ds
 import json
 import random
 
@@ -66,6 +66,8 @@ def moderator_session_data():
             player_dict["role"] = special_char
             player_dict["is_alive"] = True
             player_dict["name"] = "TBD"
+            player_dict["alias"] = "TBD"
+            player_dict["profession"] = "TBD"
             player_id += 1
             num_special_characters += 1
             player_dict_list.append(player_dict)
@@ -77,6 +79,8 @@ def moderator_session_data():
         player_dict["role"] = "werewolf"
         player_dict["is_alive"] = True
         player_dict["name"] = "TBD"
+        player_dict["alias"] = "TBD"
+        player_dict["profession"] = "TBD"
         player_id += 1
         player_dict_list.append(player_dict)
 
@@ -90,6 +94,8 @@ def moderator_session_data():
         player_dict["role"] = "villager"
         player_dict["is_alive"] = True
         player_dict["name"] = "TBD"
+        player_dict["alias"] = "TBD"
+        player_dict["profession"] = "TBD"
         player_id += 1
         player_dict_list.append(player_dict)
     
@@ -102,6 +108,8 @@ def moderator_session_data():
     player_dict["role"] = "seer"
     player_dict["is_alive"] = True
     player_dict["name"] = "TBD"
+    player_dict["alias"] = "TBD"
+    player_dict["profession"] = "TBD"
     player_id += 1
     player_dict_list.append(player_dict)
    
@@ -144,6 +152,19 @@ def player_join():
     random_idx = random.choice(g_random_list)
     g_random_list.remove(random_idx)
 
+    alias = ""
+    profession = ""
+
+    should_include_alias = request.form.getlist('alias')
+    if (should_include_alias):
+        alias = ds.get_alias()
+    
+    should_include_profession = request.form.getlist('profession')
+    if (should_include_profession):
+        profession = ds.get_profession()
+
     # update the player name in the global session dict
     g_session_dict["player_info"][random_idx]['name'] = player_name
-    return render_template("selected_player.html", error = False, err_msg = None, role = g_session_dict["player_info"][random_idx]['role'])
+    g_session_dict["player_info"][random_idx]['alias'] = alias
+    g_session_dict["player_info"][random_idx]['profession'] = profession
+    return render_template("selected_player.html", error = False, err_msg = None, role = g_session_dict["player_info"][random_idx]['role'], alias = alias, profession = profession)
