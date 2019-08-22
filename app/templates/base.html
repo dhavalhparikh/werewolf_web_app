@@ -10,8 +10,8 @@
     <link href="https://getbootstrap.com/examples/jumbotron-narrow/jumbotron-narrow.css" rel="stylesheet">
     <style>
         body {
-            /* background-image: url("/static/monochrome_forest.jpg");*/
-            background-color: #1B1B1E
+            background: url({{ url_for ('static', filename = 'monochrome_forest.jpg') }});
+            /* background-color: #1B1B1E; */
         }
         footer {
             color: white

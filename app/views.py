@@ -133,7 +133,7 @@ def reload_session_data():
 
 @app.route(g_script_root+'/player')
 def player():
-    return render_template("player.html")
+    return render_template("player.html", script_root = g_script_root)
 
 @app.route(g_script_root+'/player', methods=['POST'])
 def player_join():
@@ -167,4 +167,4 @@ def player_join():
     g_session_dict["player_info"][random_idx]['name'] = player_name
     g_session_dict["player_info"][random_idx]['alias'] = alias
     g_session_dict["player_info"][random_idx]['profession'] = profession
-    return render_template("selected_player.html", error = False, err_msg = None, role = g_session_dict["player_info"][random_idx]['role'], alias = alias, profession = profession)
+    return render_template("selected_player.html", script_root = g_script_root, error = False, err_msg = None, role = g_session_dict["player_info"][random_idx]['role'], alias = alias, profession = profession)
