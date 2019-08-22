@@ -1,5 +1,6 @@
 import uuid
 import random
+import json
 
 # list of player_dict dictionaries
 player_dict_list = []
@@ -24,19 +25,15 @@ def get_session_id():
     return str(uuid.uuid4())[-4:]
 
 def get_alias():
-    return random.choice(["John","Smith","Suzie","ShoeDog","Bob","Nicolas",
-    "Barbra","Henry","Thomas","Ronald","Margaret","Claudia","Berta","Agnes",
-    "Mary","Paula","Paul","Ivan","Alexey","Gretta","Alexandra","Svetlana",
-    "Natasha","Laura","Aarav","Vivaan","Aditya","Arjun","Shaurya","Adhira",
-    "Charu","Eka","Hiya","Keya", "Pedro Pedro","Dwight Schrute"])
+    with open('app/data.json') as f:
+        data = json.load(f)
+        f.close
+    return random.choice(data["names"])
 
 def get_profession():
-    quality = random.choice(["Apprentice","Wannabe","Mature","Elder","Underqualified",
-    "Overqualified","Accomplished","Reknown","Wealthy","Famous","Avoided","Strange",
-    "Unwelcoming","Friendly","Surprising","Optimistinc","Pessimistic","Angry","Happy",
-    "Boring","Annoying","Smelly","Bright","Fun","Trendy","Upcoming"])
-    position = random.choice(["Barber","Shopkeep","Librarian","Smith","Guard",
-    "City Council","Firefighter","Pirate","Batender","Inn Keep","Drunkard",
-    "Hermit","Dentist","Lumberjack","Monk","Herbalist","Doctor","Teacher",
-    "Banker","Scientist","Alchemist","Shoe Maker","Baker","Confectioner","Lawyer"])
+    with open('app/data.json') as f:
+        data = json.load(f)
+        f.close
+    quality = random.choice(data["quality"])
+    position = random.choice(data["profession"])
     return quality + " " + position
