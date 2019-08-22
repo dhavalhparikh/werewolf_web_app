@@ -1,7 +1,7 @@
 <!-- moderator.html-->
 
 {% extends "base.html" %}
-{% block title %}Home{% endblock %}
+{% block title %}Moderator{% endblock %}
 {% block body %}
 
 <div class="jumbotron" style="background: none">
@@ -13,25 +13,12 @@
 
         <p class="lead">Select your characters:</p>
 
-        <div class="form-check">
-            <input type="checkbox" class="form-check-input" id="bodyguard" name="bodyguard">
-            <label class="form-check-label" for="bodyguard">Bodyguard</label>
-        </div>
-
-        <div class="form-check">
-            <input type="checkbox" class="form-check-input" id="hunter" name="hunter">
-            <label class="form-check-label" for="hunter">Hunter</label>
-        </div>
-
-        <div class="form-check">
-            <input type="checkbox" class="form-check-input" id="spellcaster" name="spellcaster">
-            <label class="form-check-label" for="spellcaster">Spellcaster</label>
-        </div>
-
-        <div class="form-check">
-            <input type="checkbox" class="form-check-input" id="doppelganger" name="doppelganger">
-            <label class="form-check-label" for="doppelganger">Doppelganger</label>
-        </div>
+        {% for special_char in special_chars %}
+            <div class="form-check">
+                <input type="checkbox" class="form-check-input" id={{special_char}} name={{special_char}}>
+                <label class="form-check-label" for={{special_char}}>{{special_char}}</label>
+            </div>
+        {% endfor %}
 
         <input type="submit" class="btn btn-primary btn-lg" value="Create Session"></input>
     </form>

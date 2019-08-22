@@ -7,7 +7,7 @@ import random
 # global session context
 # TODO: find another way to do it
 g_session_dict = {}
-g_special_char_list = ['bodyguard', 'hunter', 'spellcaster', 'doppelganger']
+g_special_char_list = ['bodyguard', 'hunter', 'spellcaster', 'doppelganger', 'wolf cub', 'P.I.']
 g_random_list = []
 g_script_root = ""
 
@@ -23,7 +23,7 @@ def about():
 
 @app.route(g_script_root+'/moderator')
 def moderator():
-    return render_template("moderator.html", script_root = g_script_root)
+    return render_template("moderator.html", script_root = g_script_root, special_chars = g_special_char_list)
 
 @app.route(g_script_root+'/moderator', methods=['POST'])
 def moderator_session_data():
@@ -133,7 +133,7 @@ def reload_session_data():
 
 @app.route(g_script_root+'/player')
 def player():
-    return render_template("player.html")
+    return render_template("player.html", script_root = g_script_root)
 
 @app.route(g_script_root+'/player', methods=['POST'])
 def player_join():
@@ -167,4 +167,4 @@ def player_join():
     g_session_dict["player_info"][random_idx]['name'] = player_name
     g_session_dict["player_info"][random_idx]['alias'] = alias
     g_session_dict["player_info"][random_idx]['profession'] = profession
-    return render_template("selected_player.html", error = False, err_msg = None, role = g_session_dict["player_info"][random_idx]['role'], alias = alias, profession = profession)
+    return render_template("selected_player.html", script_root = g_script_root, error = False, err_msg = None, role = g_session_dict["player_info"][random_idx]['role'], alias = alias, profession = profession)

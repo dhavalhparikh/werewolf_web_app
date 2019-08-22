@@ -13,7 +13,7 @@
           height: 100%;
         }
         body {
-            background: #000 url(https://mocah.org/uploads/posts/4519882-creepy-nature-trees-forest-branch-digital-art-grave-dirt-road-mist-dark-cross-painting.jpg) no-repeat 50% 50%;
+            background: #000 url({{ url_for ('static', filename = 'bg.jpg') }}); no-repeat 50% 50%;
             background-size: cover;
             font-family: 'Copperplate';
         }
@@ -33,6 +33,16 @@
         }
         input {
           color: #000;
+        }
+        ul.nav a {
+          color: white
+        }
+        ul.nav li a:hover {
+          background-color: #286090;
+        }
+        div.form-check {
+          padding-top: 5px;
+          padding-bottom: 5px;
         }
     </style>
   </head>
