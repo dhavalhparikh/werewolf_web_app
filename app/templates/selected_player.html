@@ -6,12 +6,11 @@
 <div class="jumbotron">
     <form method="POST">
         {% if error is sameas true %}
-        <h1 align="center">{{err_msg}}</h2>
+        <h2 align="center">{{err_msg}}</h2>
         {% else %}
-            <h2 align="center">Your role is:</h2>
-            <h1 align="center">{{role}}</h2>
-            <h3 align="center">Your name is: {{alias}}</h3>
-            <h3 align="center">You are: {{profession}}</h3>
+            <h1 align="center">{{alias}} - The {{profession}}</h1>
+            <h2 align="center">You are a:</h2>
+            <h1 align="center">{{role}}</h1>
         {% endif %}
     </form>
 </div>

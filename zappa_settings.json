@@ -1,0 +1,10 @@
+{
+    "werewolf_staging": {
+        "app_function": "run.app", 
+        "aws_region": "us-east-1", 
+        "profile_name": "default", 
+        "project_name": "werewolf-web-ap", 
+        "runtime": "python2.7", 
+        "s3_bucket": "werewolf-zappa"
+    }
+}
