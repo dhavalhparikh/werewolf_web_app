@@ -24,7 +24,7 @@ def get_free_user_ids(session_id):
     list_of_ids = []
 
     for item in db.get(session_id)["player_info"]:
-        if item["name"] is not "TBD":
+        if "TBD" in item["name"]:
             list_of_ids.append(item["player_id"])
 
     return list_of_ids
@@ -159,27 +159,27 @@ def player_join():
     # handle errors
     if entered_session_id not in db.getall():
         return render_template('selected_player.html', script_root = g_script_root, error = True, err_msg = "Session not created yet. Please contact the moderator", role = None)
-    if db.get(entered_session_id) and not is_free_spot_left:
+    elif db.get(entered_session_id) and not is_free_spot_left(entered_session_id):
         return render_template('selected_player.html', script_root = g_script_root, error = True, err_msg = "Session Full! Please contact the moderator", role = None)
+    else:
+        # get random index from the range of availabe players
+        random_idx = random.choice(get_free_user_ids(entered_session_id))
 
-    # get random index from the range of availabe players
-    random_idx = random.choice(get_free_user_ids(entered_session_id))
+        alias = ""
+        profession = ""
 
-    alias = ""
-    profession = ""
+        should_include_alias = request.form.getlist('alias')
+        if (should_include_alias):
+            alias = ds.get_alias()
+        
+        should_include_profession = request.form.getlist('profession')
+        if (should_include_profession):
+            profession = ds.get_profession()
 
-    should_include_alias = request.form.getlist('alias')
-    if (should_include_alias):
-        alias = ds.get_alias()
-    
-    should_include_profession = request.form.getlist('profession')
-    if (should_include_profession):
-        profession = ds.get_profession()
-
-    # update the player name in session
-    session_instance = db.get(entered_session_id)
-    session_instance["player_info"][random_idx]['name'] = player_name
-    session_instance["player_info"][random_idx]['alias'] = alias
-    session_instance["player_info"][random_idx]['profession'] = profession
-    db.set(entered_session_id,session_instance)
-    return render_template("selected_player.html", script_root = g_script_root, error = False, err_msg = None, role = db.get(entered_session_id)["player_info"][random_idx]['role'], alias = alias, profession = profession)
+        # update the player name in session
+        session_instance = db.get(entered_session_id)
+        session_instance["player_info"][random_idx]['name'] = player_name
+        session_instance["player_info"][random_idx]['alias'] = alias
+        session_instance["player_info"][random_idx]['profession'] = profession
+        db.set(entered_session_id,session_instance)
+        return render_template("selected_player.html", script_root = g_script_root, error = False, err_msg = None, role = db.get(entered_session_id)["player_info"][random_idx]['role'], alias = alias, profession = profession)
