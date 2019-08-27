@@ -3,13 +3,34 @@ from app import app
 from app import ds
 import json
 import random
+import pickledb
 
 # global session context
 # TODO: find another way to do it
 g_session_dict = {}
+g_session_id = ""
 g_special_char_list = ['bodyguard', 'hunter', 'spellcaster', 'doppelganger', 'wolf cub', 'P.I.']
 g_random_list = []
 g_script_root = ""
+db = pickledb.load("app/db.json",True)
+
+def is_free_spot_left(session_id):
+    list_of_names = []
+
+    for item in db.get(session_id)["player_info"]:
+        list_of_names.append(item["name"])
+    
+    # If TBD is in the list of name return true
+    return "TBD" in list_of_names
+
+def get_free_user_ids(session_id):
+    list_of_ids = []
+
+    for item in db.get(session_id)["player_info"]:
+        if item["name"] is not "TBD":
+            list_of_ids.append(item["player_id"])
+
+    return list_of_ids
 
 @app.route('/')
 def index():
@@ -42,7 +63,7 @@ def moderator_session_data():
     total_num_players = int(request.form['num_players'])
 
     # create the list for players
-    g_random_list = list(xrange(total_num_players))
+    g_random_list = list(range(total_num_players))
     print(g_random_list)
 
     num_special_characters = 0
@@ -121,15 +142,18 @@ def moderator_session_data():
     session_dict['num_werewolves'] = num_werewolves
     session_dict['num_villagers'] = num_villagers
 
-    # store in global session dict
-    g_session_dict = session_dict
+    #Set id as the key for the session and the value
+    db.set(session_dict['session_id'],session_dict)
 
     # return json.dumps(session_dict)
-    return render_template("session.html", session_dict = g_session_dict, script_root = g_script_root)
+    return render_template("session.html", session_dict = db.get(g_session_id), script_root = g_script_root, session_id = session_id)
     
-@app.route(g_script_root+'/reload')
-def reload_session_data():
-    return render_template("session.html", session_dict = g_session_dict, script_root = g_script_root)
+@app.route(g_script_root+'/reload/<session_id>')
+def reload_session_data(session_id):
+    if session_id in db.getall():
+        return render_template("session.html", session_dict = db.get(session_id), script_root = g_script_root, session_id = session_id)
+    else: 
+        return render_template('selected_player.html', script_root = g_script_root, error = True, err_msg = "Session not created yet. Create new session!", role = None)
 
 @app.route(g_script_root+'/player')
 def player():
@@ -141,16 +165,13 @@ def player_join():
     entered_session_id = request.form['session_id']
 
     # handle errors
-    if not g_session_dict and not g_random_list:
+    if entered_session_id not in db.getall():
         return render_template('selected_player.html', script_root = g_script_root, error = True, err_msg = "Session not created yet. Please contact the moderator", role = None)
-    if g_session_dict['session_id'] not in entered_session_id:
-        return render_template('selected_player.html', script_root = g_script_root, error = True, err_msg = "Invalid session ID", role = None)
-    if g_session_dict and not g_random_list:
+    if db.get(entered_session_id) and not is_free_spot_left:
         return render_template('selected_player.html', script_root = g_script_root, error = True, err_msg = "Session Full! Please contact the moderator", role = None)
 
-    # get random index from the range
-    random_idx = random.choice(g_random_list)
-    g_random_list.remove(random_idx)
+    # get random index from the range of availabe players
+    random_idx = random.choice(get_free_user_ids(entered_session_id))
 
     alias = ""
     profession = ""
@@ -163,8 +184,10 @@ def player_join():
     if (should_include_profession):
         profession = ds.get_profession()
 
-    # update the player name in the global session dict
-    g_session_dict["player_info"][random_idx]['name'] = player_name
-    g_session_dict["player_info"][random_idx]['alias'] = alias
-    g_session_dict["player_info"][random_idx]['profession'] = profession
-    return render_template("selected_player.html", script_root = g_script_root, error = False, err_msg = None, role = g_session_dict["player_info"][random_idx]['role'], alias = alias, profession = profession)
+    # update the player name in session
+    session_instance = db.get(entered_session_id)
+    session_instance["player_info"][random_idx]['name'] = player_name
+    session_instance["player_info"][random_idx]['alias'] = alias
+    session_instance["player_info"][random_idx]['profession'] = profession
+    db.set(entered_session_id,session_instance)
+    return render_template("selected_player.html", script_root = g_script_root, error = False, err_msg = None, role = db.get(entered_session_id)["player_info"][random_idx]['role'], alias = alias, profession = profession)
