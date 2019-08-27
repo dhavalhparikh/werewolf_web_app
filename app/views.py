@@ -7,10 +7,7 @@ import pickledb
 
 # global session context
 # TODO: find another way to do it
-g_session_dict = {}
-g_session_id = ""
 g_special_char_list = ['bodyguard', 'hunter', 'spellcaster', 'doppelganger', 'wolf cub', 'P.I.']
-g_random_list = []
 g_script_root = ""
 db = pickledb.load("app/db.json",True)
 
@@ -48,12 +45,7 @@ def moderator():
 
 @app.route(g_script_root+'/moderator', methods=['POST'])
 def moderator_session_data():
-    global g_session_dict
     global g_special_char_list
-    global g_random_list
-
-    g_session_dict.clear()
-    g_random_list[:] = []
 
     session_id = ds.get_session_id()
     
@@ -146,7 +138,7 @@ def moderator_session_data():
     db.set(session_dict['session_id'],session_dict)
 
     # return json.dumps(session_dict)
-    return render_template("session.html", session_dict = db.get(g_session_id), script_root = g_script_root, session_id = session_id)
+    return render_template("session.html", session_dict = db.get(session_id), script_root = g_script_root, session_id = session_id)
     
 @app.route(g_script_root+'/reload/<session_id>')
 def reload_session_data(session_id):
