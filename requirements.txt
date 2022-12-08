@@ -1,7 +1,7 @@
 argcomplete==1.9.3
 boto3==1.9.213
 botocore==1.12.213
-certifi==2019.6.16
+certifi==2022.12.7
 cfn-flip==1.2.1
 chardet==3.0.4
 Click==7.0
